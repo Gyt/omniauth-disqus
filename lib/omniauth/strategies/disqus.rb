@@ -1,4 +1,4 @@
-require 'omniauth-oauth'
+require 'omniauth/strategies/oauth2'
 require 'multi_json'
 require 'httparty'
 
@@ -8,7 +8,7 @@ module OmniAuth
       option :name, 'disqus'
       option :client_options, {
         :site => 'https://disqus.com',
-        :authorize_url => '/api/oauth/2.0/authorize/',
+        :authorize_url => '/api/oauth/2.0/authorize/?scope=read,email',
         :token_url      => '/api/oauth/2.0/access_token/'
         }
       uid { access_token.params['user_id'] }
@@ -29,7 +29,7 @@ module OmniAuth
       
       def raw_info
         begin
-          res = HTTParty.get("http://disqus.com/api/3.0/users/details.json?api_key=#{access_token.client.id}&user=#{access_token.params['user_id']}")
+          res = HTTParty.get("http://disqus.com/api/3.0/users/details.json?access_token=#{access_token.token}&api_key=#{access_token.client.id}}")
         rescue => e
           e # what should be done with this?
         end
