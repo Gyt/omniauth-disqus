@@ -26,6 +26,10 @@ module OmniAuth
       extra do
         { :raw_info => raw_info }
       end
+
+      def callback_url
+        full_host + script_name + callback_path
+      end
       
       def raw_info
         begin
